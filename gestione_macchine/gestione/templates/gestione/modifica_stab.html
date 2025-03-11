@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica Stab</title>
+</head>
+<body>
+    <h1>Modifica Stab</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salva modifiche</button>
+    </form>
+    <a href="{% url 'lista_stab %}">Torna alla lista stab</a>
+</body>
+</html>

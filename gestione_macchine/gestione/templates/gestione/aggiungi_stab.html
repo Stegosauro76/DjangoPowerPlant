@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Aggiungi Stabilimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- Assicurati di includere jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div id="responseMessage"></div>
+    <h1>Aggiungi Stabilimento</h1>
+    
+    <form id="addStabilimentoForm"  method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Aggiungi</button>
+    </form>
+    
+    <a href="{% url 'lista_stab' %}">Torna alla lista stabilimenti</a>
+
+    <script>
+        $(document).ready(function() {
+            // Gestiamo l'evento di invio del form
+            $('#addStabilimentoForm').on("submit", function(event) {
+                // Previene il comportamento predefinito del form
+                event.preventDefault();
+                
+                // Iniziamo la richiesta AJAX
+                $.ajax({
+                    type: 'POST', // Indichiamo che stiamo usando il metodo POST
+                    url: $(this).attr('action'), // Prendiamo l'URL dal form
+                    data: $(this).serialize(), // Serializziamo i dati del form
+                    success: function(response) {
+                        // Mostriamo un messaggio di successo all'utente
+                        $('#responseMessage').html('<p>Stabilimento aggiunto con successo!</p>');
+                    },
+                    error: function(xhr, status, error) {
+                        // Mostriamo un messaggio di errore all'utente
+                        $('#responseMessage').html('<p>Errore: ' + xhr.responseText + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

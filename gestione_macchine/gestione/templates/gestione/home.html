@@ -5,16 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Stabilimenti e Macchinari</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Aggiungi un po' di stile personalizzato */
-        .table thead th {
-            background-color: #007bff; /* Colore blu di Bootstrap */
-            color: white;
-        }
-        .table tbody tr:hover {
-            background-color: #f1f1f1; /* Colore di sfondo al passaggio del mouse */
-        }
-    </style>
+ 
+    
 </head>
 <body>
 
@@ -28,7 +20,7 @@
 
         <h2>Stabilimenti</h2>
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class="thead-dark">
                 <tr>
                     <th>Nome</th>
                     <th> Descrizione</th>
@@ -49,13 +41,13 @@
         </table>
         <div class="text-center">
             
-            <a href="{% url 'aggiungi_stab' %}" class="btn btn-primary">Aggiungi Stabilimento</a>
+            <a href="{% url 'aggiungi_stab' %}" class="btn btn-dark">Aggiungi Stabilimento</a>
         </div>
            
 
         <h2>Macchinari</h2>
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class ="thead-dark">
                 <tr>
                     <th>Nome</th>
                     <th>Descrizione</th>
@@ -77,12 +69,12 @@
             </tbody>
         </table>
         <div class="text-center">
-            <a href="{% url 'aggiungi_macchina' %}" class="btn btn-primary">AggiungiMacchina</a>
+            <a href="{% url 'aggiungi_macchina' %}" class="btn btn-dark">AggiungiMacchina</a>
         
         </div>
         <h2>Ore lavorative</h2>
         <table class="table table-striped table-hover">
-            <thead>
+            <thead class = "thead-dark">
                 <tr>
                     <th>Nome</th>
                     <th>Ore Lavorate</th>
@@ -113,7 +105,7 @@
 
     <div class="text-center">
             
-        <a href="{% url 'record_work_hours' %}" class="btn btn-primary">Aggiungi Ore Lavorative</a>
+        <a href="{% url 'record_work_hours' %}" class="btn btn-dark">Aggiungi Ore Lavorative</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

@@ -8,8 +8,11 @@
 <body>
     <div id="responseMessage"></div>
     <h1>Aggiungi Macchina</h1>
+
     <form id="addMachineForm">
         {% csrf_token %}
+        <!--  tipo di formattazione-->
+
         {{ form.as_p }}
         <button type="submit">Aggiungi</button>
     </form>

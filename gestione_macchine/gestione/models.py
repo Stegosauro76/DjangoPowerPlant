@@ -5,9 +5,9 @@ from django.db import models
 class Stabilimento(models.Model):
       nome = models.CharField(max_length=100)
       descrizione = models.TextField()
-def __str__(self):
+      def __str__(self): #lo inserisco per poter visualizzare il nome dell'azienda come chiave esterna invece che object(13) come formato
 
-   return self.nome
+         return f"{self.nome}"
 
 class Macchinario(models.Model):
     codiceMacchinario = models.CharField(max_length=100,primary_key=True)

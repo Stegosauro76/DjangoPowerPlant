@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import Macchinario,Stabilimento
 from .forms import MacchinarioForm, StabilimentoForm
 
@@ -44,10 +44,23 @@ def aggiungi_stabilimento(request):
     if request.method == 'POST':
         form = StabilimentoForm(request.POST)
         if form.is_valid():
-            print("sono qui")
+            
             form.save()
             return redirect('lista_stab')
     else:
         form = StabilimentoForm()
     return render(request, 'gestione/aggiungi_stab.html', {'form': form})
 
+def delete_macchinario(request, codiceMacchinario):
+
+    macchinario = get_object_or_404(Macchinario, codiceMacchinario=codiceMacchinario)
+
+
+    if request.method == 'POST':
+
+        macchinario.delete()
+
+        return redirect('lista_macchine')  
+
+
+    return render(request, 'delete_macchinario.html', {'macchinario': macchinario})

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import lista_macchine, aggiungi_macchina,modifica_macchina,home, lista_stab,aggiungi_stabilimento
+from .views import lista_macchine, aggiungi_macchina,modifica_macchina,home, lista_stab,aggiungi_stabilimento,delete_macchinario
 
 urlpatterns = [
     path('macchine/', lista_macchine, name='lista_macchine'),
@@ -8,4 +8,5 @@ urlpatterns = [
       path('macchine/modifica/<int:pk>/', modifica_macchina, name='modifica_macchina'),
       path('',home, name='home'),
       path('stab/', lista_stab, name='lista_stab'),
+      path('macchinario/<str:codiceMacchinario>/delete/', delete_macchinario, name='delete_macchinario'),
 ]

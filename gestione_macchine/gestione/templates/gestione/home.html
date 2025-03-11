@@ -31,12 +31,14 @@
             <thead>
                 <tr>
                     <th>Nome</th>
+                    <th> Descrizione</th>
                 </tr>
             </thead>
             <tbody>
                 {% for stabilimento in content.stabilimento %}
                 <tr>
                     <td>{{ stabilimento.nome }}</td>
+                    <td>{{ stabilimento.descrizione }}</td>
                 </tr>
                 {% empty %}
                 <tr>

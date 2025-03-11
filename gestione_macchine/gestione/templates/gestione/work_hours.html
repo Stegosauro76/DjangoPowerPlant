@@ -82,20 +82,18 @@
                 // Funzione da eseguire se la richiesta ha successo
 
                 success: function(response) {
+                    alert("Turno aggiunto correttamente!");
+                    
 
-                    // Mostriamo un messaggio di successo all'utente
-
-                    $('#responseMessage').html('<p>Turno aggiunto con successo!</p>');
-
+                    // $('#responseMessage').html('<p>Turno aggiunto con successo!</p>');
+                    // Mostra un messaggio di successo all'utente
                 },
 
                 // Funzione da eseguire se si verifica un errore nella richiesta
 
                 error: function(xhr, status, error) {
 
-                    // Mostriamo un messaggio di errore all'utente
-
-                    $('#responseMessage').html('<p>Errore: ' + xhr.responseText + '</p>');
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
 
                 }
 

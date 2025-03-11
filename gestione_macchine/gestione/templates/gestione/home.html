@@ -51,6 +51,8 @@
             
             <a href="{% url 'aggiungi_stab' %}" class="btn btn-primary">Aggiungi Stabilimento</a>
         </div>
+           
+
         <h2>Macchinari</h2>
         <table class="table table-striped table-hover">
             <thead>
@@ -74,10 +76,44 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-    <div class="text-center">
-        <a href="{% url 'aggiungi_macchina' %}" class="btn btn-primary">AggiungiMacchina</a>
+        <div class="text-center">
+            <a href="{% url 'aggiungi_macchina' %}" class="btn btn-primary">AggiungiMacchina</a>
         
+        </div>
+        <h2>Ore lavorative</h2>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ore Lavorate</th>
+                    <th> Data Turno</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for workhour in content.workhour %}
+                <tr>
+                    <td>{{ workhour.employee_name }}</td>
+                    <td>{{ workhour.hours_worked }}</td>
+                    <td>{{ workhour.date }}</td>
+                   
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">Nessun turno trovato.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+  
+    </div>
+   
+    
+
+    <div class="text-center">
+            
+        <a href="{% url 'record_work_hours' %}" class="btn btn-primary">Aggiungi Ore Lavorative</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

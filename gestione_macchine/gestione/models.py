@@ -16,3 +16,15 @@ class Macchinario(models.Model):
     stabilimento = models.ForeignKey(Stabilimento, on_delete=models.CASCADE)
     modello = models.CharField(max_length=24)
 
+class WorkHour(models.Model):
+
+    employee_name = models.CharField(max_length=100)
+
+    date = models.DateField()
+
+    hours_worked = models.DecimalField(max_digits=5, decimal_places=1)
+
+
+    def __str__(self):
+
+        return f"{self.employee_name}"

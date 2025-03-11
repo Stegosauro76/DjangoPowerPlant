@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conferma Cancellazione</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Aggiungi il tuo CSS qui -->
+</head>
+<body>
+    <div class="container">
+        <h1>Conferma Cancellazione</h1>
+        <p>Sei sicuro di voler eliminare il macchinario <strong>{{ macchinario.nome }}</strong>?</p>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Conferma Cancellazione</button>
+            <a href="{% url 'lista_macchine' %}">Annulla</a>
+        </form>
+    </div>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li> {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

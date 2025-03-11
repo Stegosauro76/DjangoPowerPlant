@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect,get_object_or_404
-from .models import Macchinario,Stabilimento
-from .forms import MacchinarioForm, StabilimentoForm
+from django.shortcuts import render, redirect
+from .models import Macchinario,Stabilimento,WorkHour
+from .forms import MacchinarioForm, StabilimentoForm,WorkHourForm
 
 def lista_macchine(request):
     macchine = Macchinario.objects.all()
     return render(request, 'gestione/lista_macchine.html', {'macchine': macchine})
+
+def lista_turni(request):
+    workhour = WorkHour.objects.all()
+    return render(request, 'gestione/home.html', {'workhour': workhour})
+
 
 def lista_stab(request):
     stab = Stabilimento.objects.all()
@@ -13,9 +18,11 @@ def lista_stab(request):
 def home(request):
     stab = Stabilimento.objects.all()
     macchine = Macchinario.objects.all()
+    workhour= WorkHour.objects.all()
     content={
         'stabilimento':stab,
-        'macchine':macchine
+        'macchine':macchine,
+        'workhour':workhour,
     }
     return render(request, 'gestione/home.html',{'content':content})
 
@@ -49,18 +56,28 @@ def aggiungi_stabilimento(request):
             return redirect('lista_stab')
     else:
         form = StabilimentoForm()
+        
     return render(request, 'gestione/aggiungi_stab.html', {'form': form})
 
-def delete_macchinario(request, codiceMacchinario):
 
-    macchinario = get_object_or_404(Macchinario, codiceMacchinario=codiceMacchinario)
-
+def aggiungi_ore_lavorate(request):
 
     if request.method == 'POST':
 
-        macchinario.delete()
+        form = WorkHourForm(request.POST)
 
-        return redirect('lista_macchine')  
+        if form.is_valid():
 
+            form.save()
 
-    return render(request, 'delete_macchinario.html', {'macchinario': macchinario})
+            return redirect('lista_turni') 
+
+        else:
+
+            print(form.errors) 
+
+    else:
+
+        form = WorkHourForm()
+
+    return render(request, 'gestione/work_hours.html', {'form': form})

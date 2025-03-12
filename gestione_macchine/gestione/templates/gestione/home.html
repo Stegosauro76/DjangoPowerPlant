@@ -15,10 +15,7 @@
     {% block content %}
 
 
-  
-
-
-    
+     
     <div class="container mt-5">
         <h1 class="mb-4">Gestione Stabilimenti e Macchinari</h1>
 
@@ -27,20 +24,29 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Nome</th>
-                    <th> Descrizione</th>
+                    
+                    <th>Numero Macchinari</th>
                 </tr>
             </thead>
             <tbody>
-                {% for stabilimento in content.stabilimento %}
+                {% for stabilimento in content.stabilimenti_dict%}
+             
                 <tr>
+
                     <td>{{ stabilimento.nome }}</td>
-                    <td>{{ stabilimento.descrizione }}</td>
+        
+                                     
+                
+                    <td>{{ stabilimento.numero_macchinari }}</td>
+        
                 </tr>
                 {% empty %}
                 <tr>
                     <td colspan="1">Nessuno stabilimento trovato.</td>
                 </tr>
                 {% endfor %}
+              
+                
             </tbody>
         </table>
         <div class="text-center">

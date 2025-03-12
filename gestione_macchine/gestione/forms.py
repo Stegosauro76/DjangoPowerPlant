@@ -2,8 +2,7 @@
 from django import forms
 from .models import Stabilimento, Macchinario,WorkHour
 
-from django.db.models import Sum
-from django.contrib.auth.models import User
+
 
 class StabilimentoForm(forms.ModelForm):
     class Meta:

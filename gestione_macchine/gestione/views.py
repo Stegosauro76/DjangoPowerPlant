@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db.models import Count
 from .models import Macchinario,Stabilimento,WorkHour
 from .forms import MacchinarioForm, StabilimentoForm,WorkHourForm
 
@@ -16,15 +17,43 @@ def lista_stab(request):
     return render(request, 'gestione/lista_stab.html', {'stabilimento':stab})
 
 def home(request):
-    stab = Stabilimento.objects.all()
+
+   
+
+    stabilimenti = Stabilimento.objects.annotate(numero_macchinari=Count('macchinario'))
+
     macchine = Macchinario.objects.all()
-    workhour= WorkHour.objects.all()
-    content={
-        'stabilimento':stab,
-        'macchine':macchine,
-        'workhour':workhour,
+
+    workhour = WorkHour.objects.all()
+
+           
+
+    # Create a dictionary of stabilimenti
+
+    stabilimenti_dict = [{
+
+        'nome': stab.nome,
+
+        'numero_macchinari': stab.numero_macchinari,
+
+    } for stab in stabilimenti]
+
+
+    content = {
+
+        'stabilimento': stabilimenti,  # This should be a QuerySet, not a single instance
+
+        'macchine': macchine,
+
+        'workhour': workhour,
+
+        'stabilimenti_dict': stabilimenti_dict
+
     }
-    return render(request, 'gestione/home.html',{'content':content})
+
+    
+
+    return render(request, 'gestione/home.html', {'content': content})
 
 def aggiungi_macchina(request):
     if request.method == 'POST':
@@ -81,3 +110,4 @@ def aggiungi_ore_lavorate(request):
         form = WorkHourForm()
 
     return render(request, 'gestione/work_hours.html', {'form': form})
+

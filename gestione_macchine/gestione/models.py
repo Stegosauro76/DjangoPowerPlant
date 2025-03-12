@@ -14,7 +14,7 @@ class Macchinario(models.Model):
     codiceMacchinario = models.CharField(max_length=100,primary_key=True)
     nome = models.CharField(max_length=100)
     descrizione = models.TextField()
-    stabilimento = models.ForeignKey(Stabilimento, on_delete=models.CASCADE)
+    stabilimento = models.ForeignKey(Stabilimento,related_name='macchinario',on_delete=models.CASCADE)
     modello = models.CharField(max_length=24)
 
 class WorkHour(models.Model):

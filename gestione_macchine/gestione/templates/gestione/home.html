@@ -89,6 +89,7 @@
                     <th>Nome</th>
                     <th>Ore Lavorate</th>
                     <th> Data Turno</th>
+                    <th> Macchinario</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,6 +98,7 @@
                     <td>{{ workhour.employee_name }}</td>
                     <td>{{ workhour.hours_worked }}</td>
                     <td>{{ workhour.date }}</td>
+                    <td> {{workhour.macchinario_turno}}</td>
                    
                 </tr>
                 {% empty %}

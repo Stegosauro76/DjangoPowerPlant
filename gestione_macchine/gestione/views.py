@@ -8,7 +8,7 @@ def lista_macchine(request):
     return render(request, 'gestione/lista_macchine.html', {'macchine': macchine})
 
 def lista_turni(request):
-    workhour = WorkHour.objects.all()
+    workhour = WorkHour.objects.all().values('employee_name','date','hours_worked','macchinario_turno')
     return render(request, 'gestione/lista_turni.html', {'workhour': workhour})
 
 

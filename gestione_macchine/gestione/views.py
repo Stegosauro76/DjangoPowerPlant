@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
+
 from .models import Macchinario,Stabilimento,WorkHour
 from .forms import MacchinarioForm, StabilimentoForm,WorkHourForm
 
@@ -8,7 +9,7 @@ def lista_macchine(request):
     return render(request, 'gestione/lista_macchine.html', {'macchine': macchine})
 
 def lista_turni(request):
-    workhour = WorkHour.objects.all().values('employee_name','date','hours_worked','macchinario_turno')
+    workhour = WorkHour.objects.all()
     return render(request, 'gestione/lista_turni.html', {'workhour': workhour})
 
 
@@ -17,41 +18,29 @@ def lista_stab(request):
     return render(request, 'gestione/lista_stab.html', {'stabilimento':stab})
 
 def home(request):
-
-   
-
-    stabilimenti = Stabilimento.objects.annotate(numero_macchinari=Count('macchinario'))
+    stabilimento = Stabilimento.objects.annotate(numero_macchinari=Count('macchinario'))
 
     macchine = Macchinario.objects.all()
-
+    
     workhour = WorkHour.objects.all()
-
-           
-
-    # Create a dictionary of stabilimenti
-
+    macchine_stabilimenti = Stabilimento.objects.all().prefetch_related('macchinario')# segue la chiave esterna
+    macchine_stabilimenti = {
+        'macchine_stabilimenti': macchine_stabilimenti ,
+    }
+       
+    
     stabilimenti_dict = [{
-
         'nome': stab.nome,
-
         'numero_macchinari': stab.numero_macchinari,
-
-    } for stab in stabilimenti]
-
+    } for stab in stabilimento]
 
     content = {
-
-        'stabilimento': stabilimenti,  # This should be a QuerySet, not a single instance
-
+        'stabilimento': stabilimento, 
         'macchine': macchine,
-
         'workhour': workhour,
-
-        'stabilimenti_dict': stabilimenti_dict
-
+        'stabilimenti_dict': stabilimenti_dict,
+        'macchine_stabilimenti ': macchine_stabilimenti ,
     }
-
-    
 
     return render(request, 'gestione/home.html', {'content': content})
 
@@ -111,3 +100,22 @@ def aggiungi_ore_lavorate(request):
 
     return render(request, 'gestione/work_hours.html', {'form': form})
 
+
+
+def filtra_stab(request, nome):
+    
+   
+
+    if nome:
+        # Filtra lo stabilimento in base al nome
+        stab = Stabilimento.objects.filter(nome__icontains=nome).first()
+        
+        if stab:
+            # Recupera tutti i macchinari associati a questo stabilimento
+            macchinari = stab.macchinario.all()  # Related name è 'macchinario'
+        else:
+            macchinari = []
+  
+
+   
+    return render(request, 'gestione/filtra_stab.html', {'stab': stab, 'macchinari': macchinari})

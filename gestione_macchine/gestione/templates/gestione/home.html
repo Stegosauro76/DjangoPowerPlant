@@ -1,131 +1,115 @@
 {% extends 'gestione/base.html' %}
-<!DOCTYPE html>
-<html lang="it">
- 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Gestione Stabilimenti e Macchinari{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
- 
-    
-</head>
-<body>
 
-    {% block content %}
+{% block title %}Gestione Stabilimenti e Macchinari{% endblock %}
 
+{% block content %}
+<div class="container mt-5">
 
-     
-    <div class="container mt-5">
-        <h1 class="mb-4">Gestione Stabilimenti e Macchinari</h1>
+    <div class="container-fluid h-100 d-flex justify-content-end align-items-start">
+        <a href="{% url 'aggiungi_stab' %}" class="btn btn-dark">Aggiungi Stabilimento</a>
+        <a href="{% url 'record_work_hours' %}" class="btn btn-dark">Aggiungi Ore Lavorative</a>
+        <a href="{% url 'aggiungi_macchina' %}" class="btn btn-dark">Aggiungi Macchina</a>
+        <a href="{% url 'admin:index' %}" class="btn btn-dark">Accedi come Admin</a>
+    </div>
 
-        <h2>Stabilimenti</h2>
-        <table class="table table-striped table-hover">
-            <thead class="thead-dark">
+    <h1 class="mb-4">Gestione Stabilimenti e Macchinari</h1>
+
+    <!-- Tabella degli Stabilimenti -->
+    <table id="tabella_stabilimenti" class="table table-striped table-hover" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nome</th>
+                <th>Numero Macchinari</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stabilimento in content.stabilimenti_dict %}
                 <tr>
-                    <th>Nome</th>
-                    
-                    <th>Numero Macchinari</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for stabilimento in content.stabilimenti_dict%}
-             
-                <tr>
-
-                    <td>{{ stabilimento.nome }}</td>
-        
-                                     
-                
+                    <td>
+                        <!-- Modifica il link per indirizzare a filtra_stab con id dello stabilimento -->
+                        <a href="{% url 'filtra_stab' stabilimento.nome %}" class="btn btn-dark">
+                            {{ stabilimento.nome }}
+                        </a>
+                    </td>
                     <td>{{ stabilimento.numero_macchinari }}</td>
-        
                 </tr>
-                {% empty %}
+            {% empty %}
                 <tr>
-                    <td colspan="1">Nessuno stabilimento trovato.</td>
+                    <td colspan="2">Nessuno stabilimento trovato.</td>
                 </tr>
-                {% endfor %}
-              
-                
-            </tbody>
-        </table>
-        <div class="text-center">
-            
-            <a href="{% url 'aggiungi_stab' %}" class="btn btn-dark">Aggiungi Stabilimento</a>
-        </div>
-           
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <h2>Macchinari</h2>
-        <table class="table table-striped table-hover">
-            <thead class ="thead-dark">
-                <tr>
-                    <th>Nome</th>
-                    <th>Descrizione</th>
-                    <th>Stabilimento</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for macchinario in content.macchine %}
-                <tr>
-                    <td>{{ macchinario.nome }}</td>
-                    <td>{{ macchinario.descrizione }}</td>
-                    <td>{{ macchinario.stabilimento }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3">Nessun macchinario trovato.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="text-center">
-            <a href="{% url 'aggiungi_macchina' %}" class="btn btn-dark">AggiungiMacchina</a>
-        
-        </div>
-        <h2>Ore lavorative</h2>
-        <table class="table table-striped table-hover">
-            <thead class = "thead-dark">
-                <tr>
-                    <th>Nome</th>
-                    <th>Ore Lavorate</th>
-                    <th> Data Turno</th>
-                    <th> Macchinario</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for workhour in content.workhour %}
+    <!-- Tabella delle Ore Lavorative -->
+    <h2>Ore Lavorative</h2>
+    <table id="tabella_ore_lavorative" class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nome</th>
+                <th>Ore Lavorate</th>
+                <th>Data Turno</th>
+                <th>Macchinario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workhour in content.workhour %}
                 <tr>
                     <td>{{ workhour.employee_name }}</td>
                     <td>{{ workhour.hours_worked }}</td>
                     <td>{{ workhour.date }}</td>
-                    <td> {{workhour.macchinario_turno}}</td>
-                   
+                    <td>{{ workhour.macchinario_turno }}</td>
                 </tr>
-                {% empty %}
+            {% empty %}
                 <tr>
-                    <td colspan="3">Nessun turno trovato.</td>
+                    <td colspan="4">Nessun turno trovato.</td>
                 </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% endfor %}
+        </tbody>
+    </table>
 
+</div>
 
-  
-    </div>
-   
-    
+<script>
+    $(document).ready(function() {
+        $('#tabella_ore_lavorative').DataTable({
+            "paging": true,
+            columnDefs: [
+                {
+                    targets: 0,
+                    visible: true,
+                    searchable: false
+                },
+                {
+                    targets: 1,
+                    visible: false
+                }
+            ],
+            "order": [[ 0, "asc" ]],
+        });
 
-    <div class="text-center">
-            
-        <a href="{% url 'record_work_hours' %}" class="btn btn-dark">Aggiungi Ore Lavorative</a>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Footer -->
-    {% endblock %}
+        $('#tabella_stabilimenti').DataTable({
+            scrollX: true,
+            columnDefs: [
+                {
+                    targets: 0,
+                    visible: true,
+                    searchable: false
+                },
+                {
+                    targets: 1,
+                    visible: true
+                }
+            ],
+            "order": [[ 0, "asc" ]],
+        });
+    });
+</script>
 
-    
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-</body>
-</html>
+{% endblock %}

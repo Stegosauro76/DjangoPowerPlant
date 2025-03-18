@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import lista_macchine, aggiungi_macchina,modifica_macchina,home, lista_stab,aggiungi_stabilimento,aggiungi_ore_lavorate,lista_turni
+from .views import *
 
 urlpatterns = [
     path('macchine/', lista_macchine, name='lista_macchine'),
@@ -10,4 +10,6 @@ urlpatterns = [
       path('stab/', lista_stab, name='lista_stab'),
       path('record/',aggiungi_ore_lavorate,  name='record_work_hours'),
       path('turni/',lista_turni,name="lista_turni"),
+       path('stabilimento/<str:nome>/',filtra_stab, name='filtra_stab'),
+      
 ]

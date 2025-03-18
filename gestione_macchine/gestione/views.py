@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Count
-
+from django.http import JsonResponse
 from .models import Macchinario,Stabilimento,WorkHour
 from .forms import MacchinarioForm, StabilimentoForm,WorkHourForm
 
@@ -103,19 +103,27 @@ def aggiungi_ore_lavorate(request):
 
 
 def filtra_stab(request, nome):
-    
-   
+    stab = None
+    macchinari = []
 
     if nome:
         # Filtra lo stabilimento in base al nome
         stab = Stabilimento.objects.filter(nome__icontains=nome).first()
         
         if stab:
-            # Recupera tutti i macchinari associati a questo stabilimento
-            macchinari = stab.macchinario.all()  # Related name è 'macchinario'
-        else:
-            macchinari = []
-  
+          
+                 macchinari = list(stab.macchinario.values('codiceMacchinario', 'nome')) 
 
+    # Check if the request is an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        
+        if stab:
+            stab_data = {
+                'nome': stab.nome,
+            }
+        else:
+            stab_data = None
+        
+        return JsonResponse({'stab': stab_data, 'macchinari': macchinari}) #se la richiesta è ajax restituisce i dati in formato json
    
     return render(request, 'gestione/filtra_stab.html', {'stab': stab, 'macchinari': macchinari})

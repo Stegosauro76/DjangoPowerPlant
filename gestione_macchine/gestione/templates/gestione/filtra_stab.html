@@ -4,10 +4,15 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Dettagli</h1>
+    <h1>Dettagli Stabilimento</h1>
 
-    <p><strong>Nome:</strong> {{ stab.nome }}</p>  <!-- Assicurati che "stab" sia passato correttamente -->
+    {% if stab %}
+        <p><strong>Nome:</strong> {{ stab.nome }}</p>
+    {% else %}
+        <p>Stabilimento non trovato.</p>
+    {% endif %}
 
+    <h2>Macchinari:</h2>
     <table id="tabella_macchinari" class="table table-striped table-hover">
         <thead class="thead-dark">
             <tr>
@@ -16,19 +21,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for mac in macchinari %}
+            <!-- La tabella è vuota inizialmente -->
             <tr>
-                <td>{{ mac.codiceMacchinario }}</td> 
-                <td>{{ mac.nome }}</td>             
+                <td colspan="2" class="text-center">Caricamento...</td>
             </tr>
-            {% empty %}
-            <tr>
-                <td colspan="2" class="text-center">Nessun macchinario trovato</td>
-            </tr>
-            {% endfor %}
         </tbody>
     </table>
-    
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -36,12 +34,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
 <script>
     $(document).ready(function() {
-        
-        
-        $('#tabella_macchinari').DataTable({
+        // Inizializza DataTable
+        var table = $('#tabella_macchinari').DataTable({
             "paging": true,
             "searching": true,
             "ordering": true,
@@ -51,9 +47,31 @@
                     "targets": [0, 1],
                     "orderable": true
                 }
-            ]
+            ],
+            "processing": true,  // Mostra il loading durante il recupero dei dati
+            "serverSide": true,  // Usa il server per ottenere i dati
+            "ajax": {
+                "url": "{% url 'filtra_stab' stab.nome %}",
+                "dataSrc": function (json) {
+                    // Verifica che i dati siano disponibili e mappa le righe della tabella
+                    if (json.macchinari && json.macchinari.length > 0) {
+                        return json.macchinari.map(function(macchinario) {
+                            return [
+                                macchinario.codiceMacchinario,  
+                                macchinario.nome 
+                            ];
+                        });
+                    } else {
+                        //  restituisci una riga vuota
+                        return [
+                            ['Nessun macchinario trovato', '']  // Messaggio di vuoto
+                        ];
+                    }
+                }
+            }
         });
     });
 </script>
+
 
 {% endblock %}

@@ -4,11 +4,8 @@
 
 {% block content %}
 
-
-
 <div class="container mt-5">
     <div class="container-fluid h-100 d-flex justify-content-end align-items-start mb-3">
-   
         <a href="{% url 'aggiungi_macchina' %}" class="btn btn-dark">Aggiungi Macchina</a>
         <a href="{% url 'admin:index' %}" class="btn btn-dark">Accedi come Admin</a>
     </div>
@@ -22,10 +19,13 @@
 
     <h2>Macchinari:</h2>
 
-    <div id="loading-message" class="alert alert-success" >
+    <!-- Messaggio di caricamento -->
+    <div id="loading-message" class="alert alert-success">
         <p>Caricamento in corso...</p>
     </div>
-    <table id="tabella_macchinari" class="table table-striped table-hover">
+
+    <!-- Tabella (inizialmente nascosta con display:none) -->
+    <table id="tabella_macchinari" class="table table-striped table-hover" style="display: none;">
         <thead class="thead-dark">
             <tr>
                 <th>Codice Macchinario</th>
@@ -33,13 +33,11 @@
             </tr>
         </thead>
         <tbody>
-         
             <tr>
                 <td colspan="2" class="text-center">La tabella è vuota</td>
             </tr>
         </tbody>
     </table>
-    
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -65,22 +63,25 @@
             "serverSide": true,  // Usa il server per ottenere i dati
             "ajax": {
                 "url": "{% url 'filtra_stab' stab.nome %}",
-                "dataSrc": function (json) { // una volta caricato completamente il json
+                "dataSrc": function (json) { // Una volta caricato completamente il JSON
                     setTimeout(function() {
+                        // Nasconde il messaggio di caricamento
                         $('#loading-message').hide();
-                    }, 500);
-                   
+                        
+                        // Mostra la tabella
+                        $('#tabella_macchinari').show();
+                    }, 500);  // Timeout di 500ms per simulare il caricamento
+
                     // Verifica che i dati siano disponibili e mappa le righe della tabella
                     if (json.macchinari && json.macchinari.length > 0) {
                         return json.macchinari.map(function(macchinario) {
                             return [
-                                macchinario.codiceMacchinario,  
-                                macchinario.nome 
+                                macchinario.codiceMacchinario,
+                                macchinario.nome
                             ];
                         });
-                
                     } else {
-                        //  restituisci una riga vuota
+                        // Restituisci una riga vuota
                         return [
                             ['Nessun macchinario trovato', '']  // Messaggio di vuoto
                         ];
@@ -90,6 +91,5 @@
         });
     });
 </script>
-
 
 {% endblock %}

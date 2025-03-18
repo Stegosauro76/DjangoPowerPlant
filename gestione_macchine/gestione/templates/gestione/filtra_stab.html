@@ -3,7 +3,15 @@
 {% block title %}Dettagli Stabilimento{% endblock %}
 
 {% block content %}
+
+
+
 <div class="container mt-5">
+    <div class="container-fluid h-100 d-flex justify-content-end align-items-start mb-3">
+   
+        <a href="{% url 'aggiungi_macchina' %}" class="btn btn-dark">Aggiungi Macchina</a>
+        <a href="{% url 'admin:index' %}" class="btn btn-dark">Accedi come Admin</a>
+    </div>
     <h1>Dettagli Stabilimento</h1>
 
     {% if stab %}
@@ -13,6 +21,10 @@
     {% endif %}
 
     <h2>Macchinari:</h2>
+
+    <div id="loading-message" class="alert alert-success" >
+        <p>Caricamento in corso...</p>
+    </div>
     <table id="tabella_macchinari" class="table table-striped table-hover">
         <thead class="thead-dark">
             <tr>
@@ -21,12 +33,13 @@
             </tr>
         </thead>
         <tbody>
-            <!-- La tabella è vuota inizialmente -->
+         
             <tr>
-                <td colspan="2" class="text-center">Caricamento...</td>
+                <td colspan="2" class="text-center">La tabella è vuota</td>
             </tr>
         </tbody>
     </table>
+    
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
@@ -52,7 +65,11 @@
             "serverSide": true,  // Usa il server per ottenere i dati
             "ajax": {
                 "url": "{% url 'filtra_stab' stab.nome %}",
-                "dataSrc": function (json) {
+                "dataSrc": function (json) { // una volta caricato completamente il json
+                    setTimeout(function() {
+                        $('#loading-message').hide();
+                    }, 500);
+                   
                     // Verifica che i dati siano disponibili e mappa le righe della tabella
                     if (json.macchinari && json.macchinari.length > 0) {
                         return json.macchinari.map(function(macchinario) {
@@ -61,6 +78,7 @@
                                 macchinario.nome 
                             ];
                         });
+                
                     } else {
                         //  restituisci una riga vuota
                         return [
